@@ -1,0 +1,448 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>JavaDevStuff</title>
+    <meta name="description" content="website description"/>
+    <meta name="keywords" content="website keywords, website keywords"/>
+    <meta http-equiv="content-type" content="text/html; charset=windows-1252"/>
+    <link rel="stylesheet" type="text/css" href="style/style.css"/>
+</head>
+
+<body>
+<div id="main">
+    <div id="header">
+        <div id="logo">
+            <div id="logo_text">
+                <!-- class="logo_colour", allows you to change the colour of the text -->
+                <h1><a href="index.html"><span class="logo_colour">JavaDevStuff</span></a></h1>
+
+            </div>
+        </div>
+        <div id="menubar">
+            <ul id="menu">
+                <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+                <li class="selected"><a href="index.html">Home</a></li>
+                <li><a href="#examples.html">Examples</a></li>
+                <li><a href="#page.html">A Page</a></li>
+                <li><a href="#another_page.html">Another Page</a></li>
+                <li><a href="#contact.html">Contact Us</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="content_header"></div>
+    <div id="site_content">
+        <div id="sidebar_container">
+            <div class="sidebar">
+                <div class="sidebar_top"></div>
+                <div class="sidebar_item">
+                    <!-- insert your sidebar items here -->
+                    <h3>Latest News</h3>
+                    <h4>New Website Launched</h4>
+                    <h5>September 6th, 2018</h5>
+                    <p>This website is designed to address specific topics in java and show in-depth analysis on
+                        it.<br/><a href="#">Read more</a></p>
+                </div>
+                <div class="sidebar_base"></div>
+            </div>
+            <div class="sidebar">
+                <div class="sidebar_top"></div>
+                <div class="sidebar_item">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li><a href="AD.html">How to access an on-premise Active Directory from cloud application using
+                            java</a></li>
+                        <li><a href="#">link 2</a></li>
+                        <li><a href="#">link 3</a></li>
+                        <li><a href="#">link 4</a></li>
+                    </ul>
+                </div>
+                <div class="sidebar_base"></div>
+            </div>
+            <div class="sidebar">
+                <div class="sidebar_top"></div>
+                <div class="sidebar_item">
+                    <h3>Search</h3>
+                    <form method="post" action="#" id="search_form">
+                        <p>
+                            <input class="search" type="text" name="search_field" value="Enter keywords....."/>
+                            <input name="search" type="image" style="border: 0; margin: 0 0 -9px 5px;"
+                                   src="style/search.png" alt="Search" title="Search"/>
+                        </p>
+                    </form>
+                </div>
+                <div class="sidebar_base"></div>
+            </div>
+        </div>
+        <div id="content">
+            <!-- insert the page content here -->
+            <h1>How to access an on-premise Active Directory from cloud application using java</h1>
+            <p>Recently I’ve spent lot of time to resolve one of the issues in accessing data from Active Directory. If
+                you are trying to access data from Active Directory from your cloud application, then this blog is for
+                you.</p>
+
+            <p><b>ISSUE</b>
+                <br/>In our project data from an on-premise Active Directory needed to be accessed from an application
+                in cloud environment. So the application is in one private environment (Cloud) and Active Directory is
+                in another private environment.</p>
+
+            <p>The application has to go through http proxy server in the cloud environment to access Active Directory.
+                LDAP protocol is used to access Active Directory and it needs ports 389 and 636 for simple and secured
+                communication respectively. Unfortunately these ports are blocked in most of the corporate networks to
+                keep their network secured from the internet.</p>
+
+            <p>So if you have problem with any http proxy server blocking your calls, <b>"HTTP Tunneling"</b> is one of
+                the solution to resolve it. Even though some ports(here 389 and 636) are blocked by proxy server, HTTP
+                Tunneling method allows us to send/receive information to a destination server through the proxy server
+                using the blocked ports.</p>
+
+            <br/><b>HTTP tunneling is basically done in two ways</b>
+            <br/><br/><b>1. HTTP CONNECT tunneling.</b>
+            <br/><br/>
+            <p>A variation of HTTP tunneling when behind an HTTP Proxy Server is to use the "CONNECT" HTTP method. In
+                this mechanism, the client asks an HTTP Proxy server to forward the TCP connection to the desired
+                destination. The server then proceeds to make the connection on behalf of the client. Once the
+                connection has been established by the server, the Proxy server continues to proxy the TCP stream to and
+                from the client. Note that only the initial connection request is HTTP - after that, the server simply
+                proxies the established TCP connection. This mechanism is how a client behind an HTTP proxy can access
+                websites using SSL (i.e. HTTPS).</p>
+
+            <p>In simple terms initially a handshake has to be done between source and destination via proxy server
+                using CONNECT method. Once handshake is done, a tunnel gets created between source and destination. Once
+                the tunnel is created we can pass any information though that tunnel using any port. It means even
+                LDAP/LDAPS requests can be sent through the proxy server.</p>
+
+            <p>Note : Not all HTTP Proxy Servers support this feature, and even those that do, may limit the behaviour
+                (for example only allowing connections to the default HTTPS port 443, or blocking traffic which doesn't
+                appear to be SSL).</p>
+
+            </br><b>2. HTTP without using CONNECT method</b>
+            <br/><br/>
+            <p>An HTTP tunnel can be implemented using only the usual HTTP methods as POST, GET, PUT and DELETE. In this
+                proof-of-concept program , the server runs outside the protected network and acts as a special HTTP
+                server. The client program is run on a computer inside the protected network. Whenever any network
+                traffic is passed to the client, it repackages it as an HTTP request and relays it to the outside
+                server, which extracts and executes the original network request for the client. The response to the
+                request, sent to the server, is then repackaged as an HTTP response and relayed back to the client.
+                Since all traffic is encapsulated inside normal GET and POST requests and responses, this approach works
+                through most proxies and firewalls.</p>
+
+            <p>Simply here all LDAP requests are wrapped into a HTTP request by tool one and passed through the proxy
+                server and then another tool which is outside the protected network takes the HTTP requests from proxy
+                server and extracts actual LDAP requests and send those requests to the destination(Active Directory).
+                The same way response gets back to the application.</p>
+
+            <p>Note : The second approach is just for information and I’ve not implemented this approach.</p>
+
+            <p>Here is the typical JNDI code to connect Active Directory.</p>
+
+            <pre>
+        package com.ldap;
+
+        import javax.naming.AuthenticationException;
+        import javax.naming.Context;
+        import javax.naming.NamingException;
+        import javax.naming.directory.*;
+        import java.util.Hashtable;
+
+        /**
+        * Created by dgopali on 8/16/2015.
+        */
+        public class SimpleLDAPTest {
+        public static void main(String[] args) throws Exception {
+        String username = "Administrator";
+        String password = "oracle@123";
+        String domain = "domainname.com";
+        String userLogin = username+ '@' + domain; //username@domain
+        String ldapURL = "ldap://ldap.example.com:389";
+
+        // Setup environment for authenticating
+        Hashtable<String, String> environment = new Hashtable<String, String>();
+        environment.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
+        environment.put(Context.PROVIDER_URL, ldapURL);
+        environment.put(Context.SECURITY_AUTHENTICATION, "simple");
+        environment.put(Context.SECURITY_PRINCIPAL, userLogin);
+        environment.put(Context.SECURITY_CREDENTIALS, password);
+        try
+        {
+        DirContext authContext = new InitialDirContext(environment);
+        System.out.println("User is authenticated");
+        }
+        catch (AuthenticationException ex)
+        {
+        System.out.println("Authentication failed");
+        }
+        catch (NamingException ex)
+        {
+        ex.printStackTrace();
+        }
+        }
+        }
+        </pre>
+            If you deploy the above code in a cloud environment, all the LDAP calls are blocked by the corporate http
+            proxy server.
+
+            <br/></br><b>How to modify the above code so that proxy server doesn't block LDAP calls.</b>
+            <br/><br/>
+            <p>JNDI uses default socket factory to connect to Active Directory. Also JNDI supports custom socket
+                factory. So we can inject custom socket factory to JNDI code such that it uses the this socket factory
+                to connect to Active Directory. We'll implement this socket factory such that it returns a tunnel socket
+                whenever JNDI requests for a socket.</p>
+
+            <p>Simply all we have to do is to create a tunnel socket between source and destination and do initial
+                handshake between them. Here source is the cloud application and destination is on-premise active
+                directory. Once the socket factory is implemented as described above, make sure to set JNDI property
+                (java.naming.ldap.factory.socket) before creating DirectoryContext. Thats it now all the LDAP calls will
+                go through proxy server even though proxy server blocks 389 port.</p>
+
+            <p>Custom Socket Factory Code</p>
+
+            <pre>
+        package com.proxy;
+
+        import javax.net.SocketFactory;
+        import javax.net.ssl.HandshakeCompletedEvent;
+        import javax.net.ssl.HandshakeCompletedListener;
+        import javax.net.ssl.SSLSocket;
+        import javax.net.ssl.SSLSocketFactory;
+
+        import org.slf4j.Logger;
+        import org.slf4j.LoggerFactory;
+
+        import java.io.IOException;
+        import java.io.InputStream;
+        import java.io.OutputStream;
+        import java.io.UnsupportedEncodingException;
+        import java.net.InetAddress;
+        import java.net.Socket;
+
+        /**
+        *
+        * This class creates a tunnel through a proxy server to communicate to/from Active Directory Server using HTTP CONNECT method.
+        *
+        * Prerequisites :
+        * Client application server has to trust Active Directory server.
+        *          If Self signed certificate is used
+        *              Client should have self signed certificate of the corresponding Active Direcotry server installed in its JVM
+        *          If Public certificate is used
+        *              No need to install anything on the client side.
+        *      The proxy server should allow HTTP CONNECT method.
+        *
+        * @author dheeraj.gopali
+        */
+        public class CustomSocketFactory extends SocketFactory {
+
+        private static final Logger logger = LoggerFactory.getLogger(CustomSocketFactory.class);
+
+        /**
+        * Contains proxy server host name.
+        */
+        private static String tunnelHost;
+
+        /**
+        * Contains proxy server port number.
+        */
+        private static int tunnelPort;
+
+        /**
+        * Contains whether secured data or plain data is passed through tunnel.
+        */
+        private static boolean isSecured;
+
+        public static void setTunnelHost(String tunnelHost) {
+        CustomSocketFactory.tunnelHost = tunnelHost;
+        }
+
+        public static void setTunnelPort(int tunnelPort) {
+        CustomSocketFactory.tunnelPort = tunnelPort;
+        }
+
+        public static void setIsSecured(boolean isSecured) {
+        CustomSocketFactory.isSecured = isSecured;
+        }
+
+        @Override
+        public Socket createSocket(String s, int i) throws IOException {
+        return localCreateSocket(s, i);
+        }
+
+        @Override
+        public Socket createSocket(String s, int i, InetAddress inetAddress, int i2) throws IOException {
+        return localCreateSocket(s, i);
+        }
+
+        @Override
+        public Socket createSocket(InetAddress inetAddress, int i) throws IOException {
+        return localCreateSocket(inetAddress.getHostAddress(), i);
+        }
+
+        @Override
+        public Socket createSocket(InetAddress inetAddress, int i, InetAddress inetAddress2, int i2) throws IOException {
+        return localCreateSocket(inetAddress.getHostAddress(), i);
+        }
+
+        /**
+        * Creates a new socket everty time. Based on {#isSecured} attribute, it creates SSLSocket or Simple socket.
+        *
+        * @param host Destination server host name. Here Active Directory host name.
+        * @param port Destination server port number. If secured connection is used, its' default value is 636, else 389.
+        * @return Socket object.
+        * @throws IOException
+        */
+        private Socket localCreateSocket(String host, int port) throws IOException {
+        Socket tunnel = new Socket(tunnelHost, tunnelPort);
+        doTunnelHandshake(tunnel, host, port);
+
+        return tunnel;
+        }
+
+        /**
+        * This method is invoked by JNDI while initiating connection to Active Directory.
+        *
+        * @return CustomSSLSocketFactory which contains a tunneling socket.
+        */
+        public static CustomSocketFactory getDefault() {
+        return new CustomSocketFactory();
+        }
+
+        /**
+        * This method does the initial handshake between source and destination via proxy server using CONNECT method.
+        *
+        * @param tunnel a regular socket to proxy server.
+        * @param host Destination server/Active Directory host name.
+        * @param port Destination server/Active Directory port number.
+        *
+        * @throws IOException
+        */
+        private void doTunnelHandshake(Socket tunnel, String host, int port)
+        throws IOException {
+        OutputStream out = tunnel.getOutputStream();
+        String msg = "CONNECT " + host + ":" + port + " HTTP/1.0\n"
+        + "User-Agent: " + sun.net.www.protocol.http.HttpURLConnection.userAgent + "\r\n\r\n";
+        byte b[];
+        try {
+        //We really do want ASCII7 -- the http protocol doesn't change with locale.
+        b = msg.getBytes("ASCII7");
+        } catch (UnsupportedEncodingException ignored) {
+        //If ASCII7 isn't there, something serious is wrong, but Paranoia Is Good (tm)
+        b = msg.getBytes();
+        }
+        out.write(b);
+        out.flush();
+
+        //We need to store the reply so we can create a detailed error message to the user.
+        byte reply[] = new byte[200];
+        int replyLen = 0;
+        int newlinesSeen = 0;
+        boolean headerDone = false;     /* Done on first newline */
+
+        InputStream in = tunnel.getInputStream();
+        boolean error = false;
+
+        while (newlinesSeen &amp;amp;amp;amp;amp;lt; 2) {
+        int i = in.read();
+        if (i &amp;amp;amp;amp;amp;lt; 0) {
+        throw new IOException("Unexpected EOF from proxy");
+        }
+        if (i == '\n') {
+        headerDone = true;
+        ++newlinesSeen;
+        } else if (i != '\r') {
+        newlinesSeen = 0;
+        if (!headerDone &amp;amp;amp;amp;amp;amp;&amp;amp;amp;amp;amp;amp; replyLen &amp;amp;amp;amp;amp;lt; reply.length) {
+        reply[replyLen++] = (byte) i;
+        }
+        }
+        }
+
+        /*
+        * Converting the byte array to a string is slightly wasteful in the case where the connection was successful,
+        * but it's insignificant compared to the network overhead.
+        */
+        String replyStr;
+        try {
+        replyStr = new String(reply, 0, replyLen, "ASCII7");
+        logger.info(replyStr);
+        } catch (UnsupportedEncodingException ignored) {
+        replyStr = new String(reply, 0, replyLen);
+        }
+
+        if (replyStr.toLowerCase().indexOf("200 connection established") == -1) {
+        throw new IOException("Unable to tunnel through "+ tunnelHost + ":" + tunnelPort+ ".  Proxy returns \""
+        + replyStr + "\"");
+        }
+        }
+        }
+        </pre>
+
+            <br/><b>Secured LDAPS connection.</b>
+            <br/><br/>
+            <p>The above code works for plain LDAP connection. What if you use secured LDAP connection (ldaps)?. For
+                that all you need to do is to overlay the tunnel socket that is created in the above code with SSL.</p>
+
+            <p>The below code has to be copied at line 95 in the custom socket factory code</p>
+
+            <pre>
+        //If LDAPS is used, tunnel has to be overlayed with SSL socket
+        if(isSecured) {
+        SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+        SSLSocket socket = null;
+
+        //Overlay the tunnel socket with SSL.
+        socket = (SSLSocket) factory.createSocket(tunnel, host, port, true);
+
+        //Register a callback for handshaking completion event
+        socket.addHandshakeCompletedListener(
+        new HandshakeCompletedListener() {
+        public void handshakeCompleted(
+        HandshakeCompletedEvent event) {
+        logger.info("Handshake finished!");
+        logger.info("\t CipherSuite:" + event.getCipherSuite());
+        logger.info("\t SessionId " + event.getSession());
+        logger.info("\t PeerHost " + event.getSession().getPeerHost());
+        }
+        }
+        );
+
+        socket.startHandshake();
+        return socket;
+        }
+        </pre>
+
+            <br/><b>How to set socket factory to JNDI</b>
+            <br/><br/>
+            <p>You have to put the fully qualified name of the socket factory. Add the below code on line 27 in the
+                first code patch (JNDI code to connect Active Directory.)</p>
+            <pre>
+        environment.put("java.naming.ldap.factory.socket", "com.activedirectory.factory.CustomSSLSocketFactory");
+        </pre>
+
+            <br/>
+            <p><b>Add certificates</b>
+            <ul>
+                <li>If you are using self signed certificates for development purpose, you need to add those
+                    certificates in jdk truststore. You can use IIS to create certificates in server where AD is
+                    installed.
+                    You can use keytool to import certificates in JDK trustore.
+                </li>
+                <li>If you use tomcat, ssl connector has to be enabled in the server.xml.</li>
+            </ul>
+            </p>
+
+            <b> References :</b>
+            <br/>1. https://en.wikipedia.org/wiki/HTTP_tunnel
+            <br/>2. http://docs.oracle.com/javase/6/docs/technotes/guides/security/jsse/JSSERefGuide.html
+            <br/>3. http://docs.oracle.com/javase/jndi/tutorial/ldap/security/ssl.html
+            <br/>4.
+            http://www.javaworld.com/article/2077475/core-java/java-tip-111--implement-https-tunneling-with-jsse.html
+            </p>
+        </div>
+    </div>
+    <div id="content_footer"></div>
+    <div id="footer">
+        <p><a href="index.html">Home</a> | <a href="examples.html">Examples</a> | <a href="page.html">A Page</a> | <a
+                href="another_page.html">Another Page</a> | <a href="contact.html">Contact Us</a></p>
+    </div>
+</div>
+</body>
+</html>

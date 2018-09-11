@@ -110,7 +110,7 @@ ol li
   border: 10px solid #DDD;}
 
 #logo
-{ width: 880px;
+{ width: 1200px;
   position: relative;
   height: 140px;
   background: #F5F5F5;}
@@ -144,7 +144,7 @@ ol li
   color: #999;}
 
 #menubar
-{ width: 872px;
+{ width: 1192px;
   height: 45px;
   padding-right: 8px;
   background: #DDD;
@@ -187,7 +187,7 @@ ul#menu li a:hover
 { color: #323232;}
 
 #site_content
-{ width: 880px;
+{ width: 1200px;
   overflow: hidden;
   margin: 20px auto 0 auto;
   padding: 0 0 10px 0;} 
@@ -225,7 +225,7 @@ ul#menu li a:hover
 
 #content
 { text-align: left;
-  width: 620px;
+  width: 900px;
   padding: 0 0 0 5px;
   float: right;}
   
@@ -333,3 +333,8 @@ table tr td
 { background: #E5E5DB;
   color: #47433F;
   border-top: 1px solid #FFF;}
+
+customheading {
+  font: normal 110% arial;
+  font-weight: bold;
+}
